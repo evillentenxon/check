@@ -5,6 +5,8 @@ const postDataRoutes = require('./routes/myRoutes');
 
 const app = express();
 app.use(express.json()); // For parsing application/json
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cors());
 
 // Connect to MongoDB directly without dotenv
