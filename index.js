@@ -7,6 +7,9 @@ const app = express();
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
+
 app.use(cors());
 
 // Connect to MongoDB directly without dotenv

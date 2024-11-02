@@ -3,55 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Submission Form</title>
+    <title>Document</title>
+    <style>
+        /* Background and general styles */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #4b0d0d, #8a1c1c);
+            font-family: Arial, sans-serif;
+            color: #f4f4f4;
+        }
+
+        /* Form container */
+        form {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Label styles */
+        label {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            display: block;
+            color: #ffcccc;
+            text-align: left;
+        }
+
+        /* Input styles */
+        input[type="email"],
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        /* Text inputs */
+        input[type="email"],
+        input[type="text"],
+        input[type="password"] {
+            background-color: #f8f8f8;
+            color: #4b0d0d;
+        }
+
+        input[type="email"]:read-only {
+            background-color: #f3e5e5;
+            cursor: not-allowed;
+        }
+
+        /* Submit button */
+        input[type="submit"] {
+            background: linear-gradient(135deg, #8a1c1c, #ff3333);
+            color: #f4f4f4;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background: linear-gradient(135deg, #ff3333, #8a1c1c);
+        }
+
+        /* Form heading style */
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            color: #ff9999;
+        }
+
+        /* Small style adjustments */
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Submit Your Data</h2>
-    <form id="dataForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-
-        <label for="age">Age:</label>
-        <input type="number" id="age" name="age" required><br><br>
-
-        <label for="email">Email:</label>
-        <input id="email" name="email" required><br><br>
-
-        <button type="submit">Submit</button>
+    <form action="" method="post">
+        <h1>Registration Form</h1>
+        <label>Email: <input type="email" id="email" value="" readonly></label>
+        <label>Username: <input type="text" required></label>
+        <label>Password: <input type="password" required></label>
+        <input type="submit" value="Submit">
     </form>
 
-    <!-- <script>
-        document.getElementById("dataForm").addEventListener("submit", async function(event) {
-            event.preventDefault();
+    <script>
+        // Function to get the query parameter
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
-            // Collect form data
-            const data = {
-                name: document.getElementById("name").value,
-                age: document.getElementById("age").value,
-                email: document.getElementById("email").value
-            };
-
-            // Send a POST request to the server
-            try {
-                const response = await fetch("http://localhost:4000/api/data", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    alert("Data saved successfully: " + JSON.stringify(result.data));
-                } else {
-                    alert("Failed to save data");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("An error occurred. Please try again.");
-            }
-        });
-    </script> -->
+        // Get email from URL and display it
+        const email = getQueryParam('email');
+        if (email) {
+            document.getElementById('email').value = email;
+        }
+    </script>
 </body>
 </html>
