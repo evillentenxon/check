@@ -24,7 +24,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'romangautam71399@gmail.com',
-    pass: 'xeqe ckow vyyr jzal'
+    pass: 'fyui omda qdcb azlp'
   }
 });
 
@@ -79,9 +79,9 @@ exports.otpSend = async (req, res) => {
 // Endpoint for verifying OTP
 exports.otpVerify = async (req, res) => {
   const { email, otp } = req.body;
-  const testOtp= '123456';
-  // if (otpStore[email] === otp) {
-    if (testOtp === otp) {
+  // const testOtp= '123456';
+  if (otpStore[email] === otp) {
+    // if (testOtp === otp) {
     res.json({ message: 'OTP verified successfully'});
     delete otpStore[email];  // Optionally remove OTP after verification
   } else {

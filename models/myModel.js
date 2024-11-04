@@ -8,6 +8,13 @@ const userSchema = new mongoose.Schema({
     photo: String  // Field to store the photo file path
 });
 
-const UserModel= mongoose.model('users',userSchema);
+const communitySchema= new mongoose.Schema({
+    cn: String,
+    description: String,
+    location: String
+});
 
-module.exports = {UserModel};
+const UserModel= mongoose.model('users',userSchema);
+const CommunityModel= mongoose.model('community',communitySchema);
+
+module.exports = {UserModel, CommunityModel};
