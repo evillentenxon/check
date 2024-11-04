@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Registration</title>
+    <style>
+        /* Reset some default styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Center content */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f0f4f8;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: #333;
+        }
+
+        /* Image styling */
+        img {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+
+        /* Heading styling */
+        h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #2d8f4f;
+            margin-bottom: 20px;
+        }
+
+        /* Button styling */
+        button {
+            padding: 12px 24px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #2d8f4f;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #249944;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="/images/success.gif" alt="Success Image" />
+    <h1>Account has been successfully created! Continue to the homepage.</h1>
+    <button onclick="window.location.href='http://localhost:3000'">Continue</button>
+</body>
+</html>

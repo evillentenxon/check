@@ -2,17 +2,20 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const postDataRoutes = require('./routes/myRoutes');
+const path = require('path');
 
 const app = express();
 app.use(express.json()); // For parsing application/json
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the 'public' directory
-app.use(express.static('public'));
+// app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors());
 
-// Connect to MongoDB directly without dotenv
+// Connect to MongoDB
 mongoose.connect("mongodb+srv://romangautam71399:BouRRJ6oe8VedNjq@cluster1.9zper.mongodb.net/gamingorbit", {
   useNewUrlParser: true,
   useUnifiedTopology: true,

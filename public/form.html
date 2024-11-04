@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>create account</title>
     <style>
         /* Background and general styles */
         body {
@@ -91,11 +91,12 @@
     </style>
 </head>
 <body>
-    <form action="" method="post">
+    <form action="http://localhost:4000/postData/sent" method="post" enctype="multipart/form-data">
         <h1>Registration Form</h1>
-        <label>Email: <input type="email" id="email" value="" readonly></label>
-        <label>Username: <input type="text" required></label>
-        <label>Password: <input type="password" required></label>
+        <label>Email: <input type="email" name="email" id="email" value="" readonly></label>
+        <label>Username: <input type="text" name="username" required></label>
+        <label>Password: <input type="password" name="password" required></label>
+        <label>Photo: <input type="file" name="photo" required></label>
         <input type="submit" value="Submit">
     </form>
 
