@@ -22,3 +22,16 @@ exports.communityCreate = async (req, res) => {
     res.status(500).json({ message: 'Failed to create community', error });
   }
 };
+
+exports.topCommunities= async(req,res)=>{
+  try {
+    // Fetch all communities from the database
+    const communities = await CommunityModel.find();
+    
+    // Respond with the retrieved communities
+    res.status(200).json(communities);
+  } catch (error) {
+    console.error('Error fetching communities:', error);
+    res.status(500).json({ message: 'Failed to retrieve communities', error });
+  }
+}
