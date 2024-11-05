@@ -11,6 +11,6 @@ router.post('/verifyOtp',postController.otpVerify);
 router.post('/login',postController.login);
 
 //community snga related
-router.post('/communityCreate',commController.communityCreate);
+router.post('/communityCreate', upload.single('photo'), commController.communityCreate);
 
 module.exports = router;

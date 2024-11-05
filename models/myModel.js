@@ -11,7 +11,10 @@ const userSchema = new mongoose.Schema({
 const communitySchema= new mongoose.Schema({
     cn: String,
     description: String,
-    location: String
+    location: String,
+    gameList: String,
+    privacy: String,
+    photo: String  // Field to store the photo file path
 });
 
 const UserModel= mongoose.model('users',userSchema);
