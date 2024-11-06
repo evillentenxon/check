@@ -13,5 +13,6 @@ router.post('/login',postController.login);
 //community snga related
 router.post('/communityCreate', upload.single('photo'), commController.communityCreate);
 router.get('/topCommunities',commController.topCommunities);
+router.get('/CommunityView/:communityId', commController.communityDetails);
 
 module.exports = router;
