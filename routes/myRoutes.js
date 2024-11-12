@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const postController = require('../controllers/myControllers');
 const commController= require('../controllers/communityController');
-const upload = require('../controllers/multerConfig'); // Adjust path as needed
+const upload = require('../controllers/multerConfig'); 
+const contactController= require('../controllers/contactController')
 
 //authentication snga related
 router.post('/sent', upload.single('photo'), postController.postData);
@@ -14,5 +15,8 @@ router.post('/login',postController.login);
 router.post('/communityCreate', upload.single('photo'), commController.communityCreate);
 router.get('/topCommunities',commController.topCommunities);
 router.get('/CommunityView/:communityId', commController.communityDetails);
+
+//contact us (message) snga related
+router.post('/contact',contactController.contact);
 
 module.exports = router;

@@ -17,7 +17,15 @@ const communitySchema= new mongoose.Schema({
     photo: String  // Field to store the photo file path
 });
 
+const messageSchema= new mongoose.Schema({
+    name: String,
+    email: String,
+    contact_no: String,
+    message: String,
+})
+
 const UserModel= mongoose.model('users',userSchema);
 const CommunityModel= mongoose.model('community',communitySchema);
+const ContactModel= mongoose.model('messages',messageSchema);
 
-module.exports = {UserModel, CommunityModel};
+module.exports = {UserModel, CommunityModel, ContactModel};
