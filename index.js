@@ -1,36 +1,113 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const postDataRoutes = require('./routes/myRoutes');
+const http = require('http');
 const path = require('path');
+const { spawn } = require('child_process');
+const { Server: SocketIO } = require('socket.io');
+const postDataRoutes = require('./routes/myRoutes');
 
 const app = express();
-app.use(express.json()); // For parsing application/json
+const server = http.createServer(app);
+const io = new SocketIO(server);
+
+// Middleware setup
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Serve static files from the 'public' directory
-// app.use(express.static('public'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 app.use(cors());
+app.use(express.static(path.resolve('./public')));
+app.use('/uploads', express.static(path.resolve('./uploads')));
 
-// Connect to MongoDB
-mongoose.connect("mongodb+srv://romangautam71399:BouRRJ6oe8VedNjq@cluster1.9zper.mongodb.net/gamingorbit", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-
+// MongoDB connection
+mongoose
+  .connect("mongodb+srv://romangautam71399:BouRRJ6oe8VedNjq@cluster1.9zper.mongodb.net/gamingorbit", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('Failed to connect to MongoDB', error));
 
-
-
-// Use routes defined in postData.js
+// Route setup
 app.use('/postData', postDataRoutes);
+
+// FFmpeg command options
+const ffmpegOptions = [
+    '-f', 'webm',              // Specify WebM as the input format
+    '-loglevel', 'verbose',    // Enable verbose logging for debugging
+    '-i', '-',                 // Input from stdin
+    '-c:v', 'libx264',         // Video codec
+    '-preset', 'ultrafast',    // Low-latency preset
+    '-tune', 'zerolatency',    // For streaming use cases
+    '-r', '25',                // Frame rate
+    '-g', '50',                // GOP size
+    '-keyint_min', '25',       // Minimum GOP size
+    '-crf', '25',              // Constant Rate Factor
+    '-pix_fmt', 'yuv420p',     // Pixel format
+    '-sc_threshold', '0',      // Scene change threshold
+    '-profile:v', 'main',      // H.264 profile
+    '-level', '3.1',           // H.264 level
+    '-c:a', 'aac',             // Audio codec
+    '-b:a', '128k',            // Audio bitrate
+    '-ar', '32000',            // Audio sample rate
+    '-f', 'flv',               // Output format
+    '-loglevel', 'debug',      // Debug logging for FFmpeg
+    `rtmp://a.rtmp.youtube.com/live2/0pvz-y29h-df7w-1j7h-0yw7` // RTMP URL
+];
+  
+// FFmpeg process
+const ffmpegProcess = spawn('ffmpeg', ffmpegOptions);
+
+ffmpegProcess.stdout.on('data', (data) => console.log(`FFmpeg stdout: ${data}`));
+ffmpegProcess.stderr.on('data', (data) => console.error(`FFmpeg stderr: ${data}`));
+ffmpegProcess.on('close', (code) => console.log(`FFmpeg process exited with code ${code}`));
+ffmpegProcess.on('error', (err) => console.error('FFmpeg process error:', err));
+
+// Socket.IO handling
+let bufferQueue = [];
+
+io.on('connection', (socket) => {
+    console.log('Socket connected:', socket.id);
+
+    socket.on('binarystream', (chunk) => {
+        try {
+            bufferQueue.push(chunk);
+            if (bufferQueue.length > 5) {
+                const buffer = Buffer.concat(bufferQueue);
+                bufferQueue = [];
+                if (!ffmpegProcess.stdin.destroyed) {
+                    ffmpegProcess.stdin.write(buffer, (err) => {
+                        if (err) console.error('Error writing to FFmpeg stdin:', err);
+                    });
+                } else {
+                    console.warn('FFmpeg stdin destroyed, skipping write');
+                }
+            }
+        } catch (err) {
+            console.error('Error processing binary stream:', err);
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Socket disconnected:', socket.id);
+    });
+});
+
+// Graceful shutdown
+const shutdown = () => {
+    console.log('Shutting down server...');
+    if (!ffmpegProcess.killed) {
+        ffmpegProcess.stdin.end();
+        ffmpegProcess.kill('SIGTERM');
+    }
+    server.close(() => {
+        console.log('HTTP server closed');
+        process.exit(0);
+    });
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
 // Start the server
 const PORT = 4000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

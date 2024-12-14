@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Orbit Streaming</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', Arial, sans-serif; /* Gaming font */
+        }
+
+        body {
+            background: radial-gradient(circle, #4a0000, #000000); /* Maroon and black */
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            color: #00d4ff; /* Sky blue accent */
+            text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #0094cc;
+        }
+
+        div {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 212, 255, 0.8);
+            width: 90%;
+            max-width: 450px;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border: 2px solid #00d4ff; /* Sky blue border */
+            border-radius: 10px;
+            box-shadow: 0 0 15px #00d4ff, 0 0 30px #0094cc;
+        }
+
+        button {
+            background: linear-gradient(45deg, #00d4ff, #0056ff);
+            color: #ffffff;
+            border: none;
+            padding: 12px 18px;
+            margin: 8px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-family: 'Orbitron', Arial, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.6), 0 0 10px rgba(0, 212, 255, 0.4);
+        }
+
+        button:disabled {
+            background: #333333;
+            color: #aaaaaa;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            background: linear-gradient(45deg, #00d4ff, #008cff);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.8), 0 0 15px rgba(0, 136, 255, 0.6);
+            transform: translateY(-3px);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+                padding: 10px 14px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>Gaming Orbit Streaming</h1>
+    <div>
+        <video id="user-video" autoplay muted></video>
+        <button id="start-camera-btn">Start Camera</button>
+        <button id="stop-camera-btn" disabled>Stop Camera</button>
+        <button id="go-live-btn" disabled>Go Live</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

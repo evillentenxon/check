@@ -3,7 +3,7 @@ const router = express.Router();
 const postController = require('../controllers/myControllers');
 const commController= require('../controllers/communityController');
 const upload = require('../controllers/multerConfig'); 
-const contactController= require('../controllers/contactController')
+const contactController= require('../controllers/contactController');
 
 //authentication snga related
 router.post('/sent', upload.single('photo'), postController.postData);
