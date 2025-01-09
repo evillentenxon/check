@@ -20,7 +20,7 @@ app.use('/uploads', express.static(path.resolve('./uploads')));
 
 // MongoDB connection
 mongoose
-  .connect("mongodb+srv://romangautam71399:BouRRJ6oe8VedNjq@cluster1.9zper.mongodb.net/gamingorbit", {
+  .connect("mongodb+srv://romangautam71399:DsqyCC1hQMH2biAP@cluster1.9zper.mongodb.net/gamingorbit?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
