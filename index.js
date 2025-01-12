@@ -9,7 +9,7 @@ const postDataRoutes = require('./routes/myRoutes');
 
 const app = express();
 const server = http.createServer(app);
-const io = new SocketIO(server);
+// const io = new SocketIO(server);
 
 // Middleware setup
 app.use(express.json());
@@ -61,6 +61,15 @@ ffmpegProcess.stdout.on('data', (data) => console.log(`FFmpeg stdout: ${data}`))
 ffmpegProcess.stderr.on('data', (data) => console.error(`FFmpeg stderr: ${data}`));
 ffmpegProcess.on('close', (code) => console.log(`FFmpeg process exited with code ${code}`));
 ffmpegProcess.on('error', (err) => console.error('FFmpeg process error:', err));
+
+const io = new SocketIO(server, {
+    cors: {
+        origin: 'http://localhost:3000', // Replace with your frontend URL
+        methods: ['GET', 'POST'],        // Allowed HTTP methods
+        credentials: true,               // Allow cookies or authentication headers
+    },
+});
+
 
 // Socket.IO handling
 let bufferQueue = [];
