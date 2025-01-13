@@ -6,6 +6,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const { Server: SocketIO } = require('socket.io');
 const postDataRoutes = require('./routes/myRoutes');
+const tournamentRoutes= require('./routes/tournamentRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -29,6 +30,7 @@ mongoose
 
 // Route setup
 app.use('/postData', postDataRoutes);
+app.use('/tour', tournamentRoutes);
 
 // FFmpeg command options
 const ffmpegOptions = [
