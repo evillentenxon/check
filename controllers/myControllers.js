@@ -89,7 +89,7 @@ exports.login = async (req,res)=>{
         
         if (password==user.password) {
             // Password matches, allow user to log in
-            res.status(200).json({ message: 'Login successful', username: user.username, photo: user.photo });
+            res.status(200).json({ message: 'Login successful', username: user.username, photo: user.photo, userId: user._id});
         } else {
             // Password does not match
             res.status(401).json({ message: 'Invalid username or password' });

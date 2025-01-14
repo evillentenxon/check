@@ -22,6 +22,15 @@ const tournamentSchema = new mongoose.Schema({
   },
   region: { type: String, required: true, trim: true },
   status: { type: String, enum: ["Public", "Private"], required: true },
+  participants: [
+            {
+              userId: { 
+                type: mongoose.Schema.Types.ObjectId, // Reference to a user collection
+                ref: 'Users', 
+                required: true 
+              },
+              username: { type: String, required: true, trim: true },  
+        }],
 });
 
 const Tournament = mongoose.model("Tournament", tournamentSchema);
