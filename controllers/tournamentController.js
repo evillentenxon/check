@@ -192,47 +192,53 @@ const updateTournament = async (req, res) => {
 };
 
 //add participant
-const addParticipants= async (req, res) => {
+const addParticipants = async (req, res) => {
   const { id } = req.params;
   const { userId, username } = req.body;
 
   // Validate request body
   if (!userId || !username) {
-      return res.status(400).json({ message: 'userId and username are required.' });
+    return res.status(400).json({ message: 'userId and username are required.' });
   }
 
   try {
-      // Find the tournament by ID
-      const tournament = await Tournament.findById(id);
+    // Find the tournament by ID
+    const tournament = await Tournament.findById(id);
 
-      if (!tournament) {
-          return res.status(404).json({ message: 'Tournament not found.' });
-      }
+    if (!tournament) {
+      return res.status(404).json({ message: 'Tournament not found.' });
+    }
 
-      // Check if the user is already a participant
-      const isAlreadyParticipant = tournament.participants.some(
-          (participant) => participant.userId.toString() === userId
-      );
+    // Check if the tournament has reached the maximum number of participants
+    if (tournament.participants.length >= tournament.maxPlayers) {
+      return res.status(400).json({ message: 'Maximum players already enrolled.' });
+    }
 
-      if (isAlreadyParticipant) {
-          return res.status(400).json({ message: 'User is already a participant.' });
-      }
+    // Check if the user is already a participant
+    const isAlreadyParticipant = tournament.participants.some(
+      (participant) => participant.userId.toString() === userId
+    );
 
-      // Add participant to the tournament
-      tournament.participants.push({ userId, username });
+    if (isAlreadyParticipant) {
+      return res.status(400).json({ message: 'User is already a participant.' });
+    }
 
-      // Save the updated tournament
-      await tournament.save();
+    // Add participant to the tournament
+    tournament.participants.push({ userId, username });
 
-      res.status(200).json({
-          message: 'Participant added successfully.',
-          tournament,
-      });
+    // Save the updated tournament
+    await tournament.save();
+
+    res.status(200).json({
+      message: 'Participant added successfully.',
+      tournament,
+    });
   } catch (error) {
-      console.error('Error adding participant:', error);
-      res.status(500).json({ message: 'Internal server error.' });
+    console.error('Error adding participant:', error);
+    res.status(500).json({ message: 'Internal server error.' });
   }
 };
+
 
 // API to fetch participants 
 const fetchParticipants = async (req, res) => {
@@ -257,6 +263,33 @@ const fetchParticipants = async (req, res) => {
   }
 };
 
+//find tournament by id and update maxPlayers only
+
+const maxPlayers = async (req, res) => {
+  const { id,maxPlayers } = req.body; 
+
+  try {
+    const tournament = await Tournament.findById(id);
+
+    if (!tournament) {
+      return res.status(404).json({ message: "Tournament not found." });
+    }
+
+    // Update the maxPlayers field
+    tournament.maxPlayers = maxPlayers;
+
+    // Save the updated tournament
+    await tournament.save();
+
+    res.status(200).json({
+      message: "maxPlayers updated successfully.",
+      tournament,
+    });
+  } catch (error) {
+    console.error("Error updating maxPlayers:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
 
 module.exports= {
   checkTournamentName,
@@ -267,4 +300,5 @@ module.exports= {
   updateTournament,
   addParticipants,
   fetchParticipants,
+  maxPlayers,
 };
