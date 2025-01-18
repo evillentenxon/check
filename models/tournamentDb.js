@@ -4,7 +4,7 @@ const tournamentSchema = new mongoose.Schema({
   tournamentName: { type: String, required: true, trim: true },
   tournamentUrl: { type: String, required: true, unique: true, trim: true },
   startDate: { type: Date, required: true },
-  maxPlayers: { type: Number, default: 10 },
+  maxPlayers: { type: Number, default: 4 },
   game: {
     type: String,
     required: true,
