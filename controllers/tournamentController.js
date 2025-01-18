@@ -27,7 +27,7 @@ const createTournament = async (req, res) => {
   try {
     console.log("Request Body:", req.body);
 
-    const { tournamentName, tournamentUrl, startDate, game, region, status } = req.body;
+    const { tournamentName, tournamentUrl, startDate, game, region, status, userId } = req.body;
 
     console.log("Received game value:", game);
 
@@ -37,24 +37,24 @@ const createTournament = async (req, res) => {
     }
 
     const allowedGames = [
-        "PUBG",
-        "FREEFIRE",
-        "FORTNITE",
-        "COD",
-        "CLASH ROYALE",
-        "COUNTER-STRIKE 2",
-        "CYBERPUNK 2077",
-        "GTA SAN ANDRES",
-        "POKEMON GO",
-        "COC",
-     ];
-    
+      "PUBG",
+      "FREEFIRE",
+      "FORTNITE",
+      "COD",
+      "CLASH ROYALE",
+      "COUNTER-STRIKE 2",
+      "CYBERPUNK 2077",
+      "GTA SAN ANDRES",
+      "POKEMON GO",
+      "COC",
+    ];
+
     if (!allowedGames.includes(game)) {
       return res.status(400).json({
         message: `Invalid game selected. Allowed games are: ${allowedGames.join(", ")}.`,
       });
     }
-    
+
 
     // Check for duplicate tournament name
     const existingName = await Tournament.findOne({ tournamentName });
@@ -76,6 +76,7 @@ const createTournament = async (req, res) => {
       game,
       region,
       status,
+      createdBy: userId,
     });
 
     // Save tournament to MongoDB
@@ -109,11 +110,11 @@ const tourData = async (req, res) => {
   try {
     // Fetch the last tournament (sorted by _id in descending order)
     const tournament = await Tournament.findOne().sort({ _id: -1 }); // Sort by _id in descending order and fetch the first one
-    
+
     if (!tournament) {
       return res.status(404).json({ message: "No tournament found" });
     }
-    
+
     res.json(tournament); // Return the last tournament in JSON format
   } catch (err) {
     console.error("Error fetching tournaments:", err);
@@ -121,24 +122,18 @@ const tourData = async (req, res) => {
   }
 };
 
-//find all tournaments
-const allTourData = async (req, res) => {
+// Fetch all tournaments except those created by the user
+const allTourData= async (req, res) => {
+  const { userId } = req.params;
+
   try {
-    // Fetch all tournaments
-    const tournaments = await Tournament.find();
-
-    if (!tournaments || tournaments.length === 0) {
-      return res.status(404).json({ message: "No tournaments found" });
-    }
-
-    res.json(tournaments); // Return all tournaments in JSON format
+    const tournaments = await Tournament.find({ createdBy: { $ne: userId } });  // Exclude tournaments created by userId
+    res.status(200).json({ tournaments });
   } catch (err) {
-    console.error("Error fetching tournaments:", err);
-    res.status(500).json({ message: "Error fetching tournaments" });
+    console.error('Error fetching tournaments:', err);
+    res.status(500).json({ error: 'Error fetching tournaments' });
   }
 };
-
-
 
 //find tournament by ID
 const findTournament = async (req, res) => {
@@ -146,7 +141,7 @@ const findTournament = async (req, res) => {
   try {
     // Find the tournament by ID in the database
     const tournament = await Tournament.findById(tournamentId);
-    
+
     if (!tournament) {
       return res.status(404).json({ message: 'Tournament not found' });
     }
@@ -168,15 +163,15 @@ const updateTournament = async (req, res) => {
   try {
     // Find the tournament by ID and update it
     const updatedTournament = await Tournament.findByIdAndUpdate(
-      tournamentId, 
+      tournamentId,
       {
-        tournamentName, 
-        tournamentUrl, 
-        startDate, 
-        game, 
-        region, 
+        tournamentName,
+        tournamentUrl,
+        startDate,
+        game,
+        region,
         status
-      }, 
+      },
       { new: true }  // This option returns the updated document instead of the original
     );
 
@@ -266,7 +261,7 @@ const fetchParticipants = async (req, res) => {
 //find tournament by id and update maxPlayers only
 
 const maxPlayers = async (req, res) => {
-  const { id,maxPlayers } = req.body; 
+  const { id, maxPlayers } = req.body;
 
   try {
     const tournament = await Tournament.findById(id);
@@ -291,7 +286,32 @@ const maxPlayers = async (req, res) => {
   }
 };
 
-module.exports= {
+const getTournamentsByUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate the userId in the request body
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required." });
+    }
+
+    // Query the database for tournaments created by the specified user
+    const tournaments = await Tournament.find({ createdBy: id });
+
+    // Check if tournaments exist for the given userId
+    if (!tournaments.length) {
+      return res.status(404).json({ message: "No tournaments found for this user." });
+    }
+
+    // Respond with the list of tournaments
+    res.status(200).json({ tournaments });
+  } catch (error) {
+    console.error("Error fetching tournaments:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+module.exports = {
   checkTournamentName,
   createTournament,
   tourData,
@@ -301,4 +321,5 @@ module.exports= {
   addParticipants,
   fetchParticipants,
   maxPlayers,
+  getTournamentsByUser,
 };
