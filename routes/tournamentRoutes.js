@@ -15,7 +15,7 @@ const { checkTournamentName,
 // Routes
 router.post("/check-name", checkTournamentName);
 router.post("/create", createTournament);
-router.get("/tour-data", tourData);//find last tournament
+router.get("/tour-data/:tourId", tourData);//find last tournament
 router.get("/all-tour/:userId", allTourData);
 router.get('/view/:tournamentId', findTournament);
 router.put('/update/:tournamentId', updateTournament);

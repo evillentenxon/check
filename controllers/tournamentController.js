@@ -108,14 +108,17 @@ const createTournament = async (req, res) => {
 //find the latest tournament
 const tourData = async (req, res) => {
   try {
+    const { tourId } = req.params;
+
     // Fetch the last tournament (sorted by _id in descending order)
-    const tournament = await Tournament.findOne().sort({ _id: -1 }); // Sort by _id in descending order and fetch the first one
+    // const tournament = await Tournament.findOne().sort({ _id: -1 }); // Sort by _id in descending order and fetch the first one
+    const tournament = await Tournament.findById(tourId);
 
     if (!tournament) {
       return res.status(404).json({ message: "No tournament found" });
     }
 
-    res.json(tournament); // Return the last tournament in JSON format
+    res.json(tournament); 
   } catch (err) {
     console.error("Error fetching tournaments:", err);
     res.status(500).json({ message: "Error fetching tournaments" });
@@ -123,7 +126,7 @@ const tourData = async (req, res) => {
 };
 
 // Fetch all tournaments except those created by the user
-const allTourData= async (req, res) => {
+const allTourData = async (req, res) => {
   const { userId } = req.params;
 
   try {
