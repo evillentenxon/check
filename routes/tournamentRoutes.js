@@ -10,12 +10,14 @@ const { checkTournamentName,
     fetchParticipants,
     maxPlayers,
     getTournamentsByUser,
+    lastTourId,
 } = require("../controllers/tournamentController");
 
 // Routes
 router.post("/check-name", checkTournamentName);
 router.post("/create", createTournament);
-router.get("/tour-data/:tourId", tourData);//find last tournament
+router.get("/tour-data/:tourId", tourData);
+router.get("/lastTourId", lastTourId);//find last tournament
 router.get("/all-tour/:userId", allTourData);
 router.get('/view/:tournamentId', findTournament);
 router.put('/update/:tournamentId', updateTournament);
