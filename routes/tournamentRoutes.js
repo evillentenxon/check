@@ -11,6 +11,7 @@ const { checkTournamentName,
     maxPlayers,
     getTournamentsByUser,
     lastTourId,
+    deleteTour,
 } = require("../controllers/tournamentController");
 
 // Routes
@@ -25,5 +26,7 @@ router.post('/tournament/:id/addParticipant', addParticipants);//add participant
 router.get('/tournament/:id/fetchPaticipants',fetchParticipants); //fetch particpants only of a tournament through tournament id
 router.post('/maxPlayers',maxPlayers); 
 router.get('/my-tournaments/:id',getTournamentsByUser); //fetch tournaments by user
+router.delete('/delTour/:id',deleteTour); //delete tournament 
+
 
 module.exports = router;

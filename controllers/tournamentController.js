@@ -118,7 +118,7 @@ const tourData = async (req, res) => {
       return res.status(404).json({ message: "No tournament found" });
     }
 
-    res.json(tournament); 
+    res.json(tournament);
   } catch (err) {
     console.error("Error fetching tournaments:", err);
     res.status(500).json({ message: "Error fetching tournaments" });
@@ -135,7 +135,7 @@ const lastTourId = async (req, res) => {
       return res.status(404).json({ message: "No tournament found" });
     }
 
-    res.json(tournament); 
+    res.json(tournament);
   } catch (err) {
     console.error("Error fetching tournaments:", err);
     res.status(500).json({ message: "Error fetching tournaments" });
@@ -331,6 +331,22 @@ const getTournamentsByUser = async (req, res) => {
   }
 };
 
+const deleteTour = async (req, res) => {
+  try {
+    const tournamentId = req.params.id;
+    const deletedTournament = await Tournament.findByIdAndDelete(tournamentId);
+
+    if (!deletedTournament) {
+      return res.status(404).json({ message: 'Tournament not found' });
+    }
+
+    res.status(200).json({ message: 'Tournament deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting tournament:', error);
+    res.status(500).json({ message: 'Server error. Could not delete tournament.' });
+  }
+};
+
 module.exports = {
   checkTournamentName,
   createTournament,
@@ -342,5 +358,6 @@ module.exports = {
   fetchParticipants,
   maxPlayers,
   getTournamentsByUser,
-  lastTourId
+  lastTourId,
+  deleteTour,
 };
