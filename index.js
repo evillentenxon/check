@@ -6,7 +6,8 @@ const path = require('path');
 const { spawn } = require('child_process');
 const { Server: SocketIO } = require('socket.io');
 const postDataRoutes = require('./routes/myRoutes');
-const tournamentRoutes= require('./routes/tournamentRoutes');
+const tournamentRoutes = require('./routes/tournamentRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -21,16 +22,17 @@ app.use('/uploads', express.static(path.resolve('./uploads')));
 
 // MongoDB connection
 mongoose
-  .connect("mongodb+srv://romangautam71399:DsqyCC1hQMH2biAP@cluster1.9zper.mongodb.net/gamingorbit?retryWrites=true&w=majority", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((error) => console.error('Failed to connect to MongoDB', error));
+    .connect("mongodb+srv://romangautam71399:DsqyCC1hQMH2biAP@cluster1.9zper.mongodb.net/gamingorbit?retryWrites=true&w=majority", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch((error) => console.error('Failed to connect to MongoDB', error));
 
 // Route setup
 app.use('/postData', postDataRoutes);
 app.use('/tour', tournamentRoutes);
+app.use('/admin', userRoutes);
 
 // FFmpeg command options
 const ffmpegOptions = [
@@ -55,7 +57,7 @@ const ffmpegOptions = [
     '-loglevel', 'debug',      // Debug logging for FFmpeg
     `rtmp://a.rtmp.youtube.com/live2/0pvz-y29h-df7w-1j7h-0yw7` // RTMP URL
 ];
-  
+
 // FFmpeg process
 const ffmpegProcess = spawn('ffmpeg', ffmpegOptions);
 
