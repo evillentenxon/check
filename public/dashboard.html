@@ -118,6 +118,7 @@
                     <th>Username</th>
                     <th>Password</th>
                     <th>Photo</th>
+                    <th>Role</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -138,6 +139,8 @@
                 <input type="text" id="username" required>
                 <label for="password">Password:</label>
                 <input type="password" id="password" required>
+                <label for="role">Role:</label>
+                <input type="text" id="role" required>
                 <label for="photo">Photo:</label>
                 <input type="file" id="photo">
                 <button type="submit" class="save-btn">Save</button>
@@ -168,6 +171,7 @@
                         <td>${user.username}</td>
                         <td>${user.password}</td>
                         <td><img src="http://localhost:4000/${user.photo}" alt="User Photo"></td>
+                        <td>${user.role}</td>
                         <td class="actions">
                             <button class="update-btn" onclick="openModal('${user._id}', '${user.username}', '${user.password}')">Update</button>
                             <button class="delete-btn" onclick="deleteUser('${user._id}')">Delete</button>
@@ -199,11 +203,13 @@
             const userId = document.getElementById("update-user-id").value;
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
+            const role= document.getElementById("role").value;
             const photo = document.getElementById("photo").files[0];
 
             const formData = new FormData();
             formData.append("username", username);
             formData.append("password", password);
+            formData.append("role", role);
             if (photo) formData.append("photo", photo);
 
             try {

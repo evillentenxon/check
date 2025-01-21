@@ -5,7 +5,11 @@ const userSchema = new mongoose.Schema({
     email: String,
     username: String,
     password: String,
-    photo: String  // Field to store the photo file path
+    photo: String,  // Field to store the photo file path
+    role: {
+        type:String,
+        default: "user"
+    }
 });
 
 const communitySchema= new mongoose.Schema({

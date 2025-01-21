@@ -4,7 +4,7 @@ const { UserModel } = require("../models/myModel");
 const usersList = async (req, res) => {
     try {
         // Fetch all users from the database
-        const users = await UserModel.find(); 
+        const users = await UserModel.find();
 
         // Check if there are any users
         if (!users || users.length === 0) {
@@ -19,7 +19,7 @@ const usersList = async (req, res) => {
     }
 };
 
-const delUser= async (req, res) => {
+const delUser = async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -41,11 +41,11 @@ const delUser= async (req, res) => {
     }
 };
 
-const userUpdate= async (req, res) => {
+const userUpdate = async (req, res) => {
     try {
         const { id } = req.params; // Extract user ID from URL
-        const { username, password } = req.body; // Extract username and password from body
-        let updateFields = { username, password };
+        const { username, password, role } = req.body; // Extract username and password from body
+        let updateFields = { username, password, role };
 
         // Check if a file was uploaded
         if (req.file) {

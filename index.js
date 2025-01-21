@@ -29,6 +29,12 @@ mongoose
     .then(() => console.log('Connected to MongoDB'))
     .catch((error) => console.error('Failed to connect to MongoDB', error));
 
+
+// Redirect root URL to the 'adminLogin.html' page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'adminLogin.html'));
+});
+
 // Route setup
 app.use('/postData', postDataRoutes);
 app.use('/tour', tournamentRoutes);
