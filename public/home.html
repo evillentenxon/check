@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #343a40;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #007bff;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Admin Panel
+    </header>
+    <nav>
+        <a href="./dashboard.html">Users</a>
+        <a href="./messages.html">Messages</a>
+    </nav>
+    <div class="content" id="mainContent">
+        <h1>Welcome to the Admin Panel</h1>
+        <p>Select a section from the navigation bar to view details.</p>
+    </div>
+</body>
+</html>

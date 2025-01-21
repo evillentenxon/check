@@ -105,10 +105,41 @@
             color: #fff;
             margin-left: 10px;
         }
+        /* navbar */
+        header {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #343a40;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
+    <header>
+        Admin Panel
+    </header>
+    <nav>
+        <a href="./dashboard.html">Users</a>
+        <a href="./messages.html">Messages</a>
+    </nav>
     <div id="dashboard">
         <table>
             <thead>
