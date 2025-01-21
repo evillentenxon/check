@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const upload = require('../controllers/multerConfig'); 
 
 const { usersList,
     delUser,
@@ -8,6 +9,6 @@ const { usersList,
 
 router.get('/allUsers', usersList);
 router.delete("/deleteUser/:id", delUser);
-router.put("/updateUser/:id", userUpdate);
+router.put("/updateUser/:id",upload.single('photo'),userUpdate);
 
 module.exports = router;

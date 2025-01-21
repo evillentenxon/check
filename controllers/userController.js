@@ -42,28 +42,34 @@ const delUser= async (req, res) => {
 };
 
 const userUpdate= async (req, res) => {
-    const { id } = req.params;
-    const { username, password } = req.body;
-    const photo = req.file ? req.file.path : undefined;
-
     try {
-        // Build an update object dynamically
-        const updateData = {};
-        if (username) updateData.username = username;
-        if (password) updateData.password = password;
-        if (photo) updateData.photo = photo;
+        const { id } = req.params; // Extract user ID from URL
+        const { username, password } = req.body; // Extract username and password from body
+        let updateFields = { username, password };
 
-        // Find and update the user
-        const user = await UserModel.findByIdAndUpdate(id, updateData, { new: true });
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found." });
+        // Check if a file was uploaded
+        if (req.file) {
+            updateFields.photo = req.file.path; // Add photo path to updateFields
         }
 
-        res.status(200).json({ message: "User updated successfully.", user });
+        // Update user in the database
+        const updatedUser = await UserModel.findByIdAndUpdate(
+            id,
+            updateFields,
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({
+            message: 'User updated successfully',
+            user: updatedUser,
+        });
     } catch (error) {
-        console.error("Error updating user:", error);
-        res.status(500).json({ message: "Internal server error." });
+        console.error('Error updating user:', error);
+        res.status(500).json({ message: 'Failed to update user', error });
     }
 };
 
