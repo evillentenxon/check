@@ -21,4 +21,8 @@ router.post('/contact', contactController.contact);//send messages
 router.get('/messages', contactController.message);//fetch messages
 router.delete('/delmsg/:id',contactController.delmsg); //delete messages
 
+//3rd-party api 
+router.get('/news',postController.news); // get latest news
+router.get('/countries',postController.countries); //get all countries 
+
 module.exports = router;

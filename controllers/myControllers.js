@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const otpStore = {}; // Store OTPs temporarily
 const multer = require('multer');
 const path = require('path');
+const axios = require('axios');
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -68,34 +69,79 @@ exports.otpVerify = async (req, res) => {
   // const testOtp= '123456';
   if (otpStore[email] === otp) {
     // if (testOtp === otp) {
-    res.json({ message: 'OTP verified successfully'});
+    res.json({ message: 'OTP verified successfully' });
     delete otpStore[email];  // Optionally remove OTP after verification
   } else {
     res.status(400).json({ error: 'Invalid OTP' });
   }
 }
 
-exports.login = async (req,res)=>{
+exports.login = async (req, res) => {
   const { username, password } = req.body;
 
-    try {
-        // Find the user by username
-        const user = await UserModel.findOne({ username });
-        
-        // If user not found
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid username or password' });
-        }
-        
-        if (password==user.password) {
-            // Password matches, allow user to log in
-            res.status(200).json({ message: 'Login successful', username: user.username, photo: user.photo, userId: user._id});
-        } else {
-            // Password does not match
-            res.status(401).json({ message: 'Invalid username or password' });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+  try {
+    // Find the user by username
+    const user = await UserModel.findOne({ username });
+
+    // If user not found
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid username or password' });
     }
+
+    if (password == user.password) {
+      // Password matches, allow user to log in
+      res.status(200).json({ message: 'Login successful', username: user.username, photo: user.photo, userId: user._id });
+    } else {
+      // Password does not match
+      res.status(401).json({ message: 'Invalid username or password' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
 }
+
+
+//fetch latest news
+exports.news = async (req, res) => {
+  try {
+    console.log("Making API request to NewsAPI...");
+
+    // Make request to third-party API
+    const response = await axios.get('https://newsapi.org/v2/everything', {
+      params: {
+        q: 'esports',
+        language: 'en',
+        sortBy: 'popularity',
+        apiKey: 'd3c06d565ea54631898aee2d4fc75e7c',
+      },
+    });
+
+    res.status(200).json(response.data); // Send the API response to the client
+  } catch (error) {
+    console.error("Error fetching esports news:", error.message);
+    console.error("Error Details:", {
+      message: error.message,
+      responseData: error.response?.data,
+      status: error.response?.status,
+    });
+
+    res.status(500).json({ error: "Failed to fetch esports news." });
+  }
+};
+
+//fetch all countries of the world
+exports.countries = async (req, res) => {
+  try {
+    // Make request to the external countries API
+    const response = await axios.get('https://restcountries.com/v3.1/all');
+
+    // Send the data from the response as the API's response
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error('Error fetching countries:', error.message);
+    
+    // If there's an error, send a failure response
+    res.status(500).json({ error: 'Failed to fetch countries.' });
+  }
+};
