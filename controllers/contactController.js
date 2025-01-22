@@ -20,18 +20,6 @@ exports.contact = async (req, res) => {
   }
 };
 
-exports.message = async (req, res) => {
-  try {
-    const messages = await ContactModel.find(); // Fetch all messages
-    res.status(200).json(messages);
-  } catch (error) {
-    console.error('Error fetching messages:', error);
-    res.status(500).json({ error: 'Failed to fetch messages' });
-  }
-};
-
-const mongoose = require('mongoose');
-
 exports.delmsg = async (req, res) => {
     try {
         const { id } = req.params;
@@ -48,4 +36,14 @@ exports.delmsg = async (req, res) => {
         console.error('Error deleting message:', error);
         res.status(500).send({ success: false, message: 'Failed to delete message' });
     }
+};
+
+exports.message = async (req, res) => {
+  try {
+    const messages = await ContactModel.find(); // Fetch all messages
+    res.status(200).json(messages);
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json({ error: 'Failed to fetch messages' });
+  }
 };
