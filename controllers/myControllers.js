@@ -105,7 +105,7 @@ exports.login = async (req, res) => {
 //fetch latest news
 exports.news = async (req, res) => {
   try {
-    console.log("Making API request to NewsAPI...");
+    // console.log("Making API request to NewsAPI...");
 
     // Make request to third-party API
     const response = await axios.get('https://newsapi.org/v2/everything', {
