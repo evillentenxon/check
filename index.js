@@ -8,6 +8,7 @@ const { Server: SocketIO } = require('socket.io');
 const postDataRoutes = require('./routes/myRoutes');
 const tournamentRoutes = require('./routes/tournamentRoutes');
 const userRoutes = require('./routes/userRoutes');
+require('dotenv').config();
 
 const app = express();
 const server = http.createServer(app);
@@ -127,6 +128,8 @@ const shutdown = () => {
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
-// Start the server
-const PORT = 4000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT; // Use Render's assigned port
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
