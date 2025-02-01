@@ -84,7 +84,7 @@ ffmpegProcess.on('error', (err) => console.error('FFmpeg process error:', err));
 
 const io = new SocketIO(server, {
     cors: {
-        origin: 'http://localhost:3000', // Replace with your frontend URL
+        origin: 'https://gaming-orbit.vercel.app', // Replace with your frontend URL
         methods: ['GET', 'POST'],        // Allowed HTTP methods
         credentials: true,               // Allow cookies or authentication headers
     },
