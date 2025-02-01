@@ -14,6 +14,11 @@ const app = express();
 const server = http.createServer(app);
 // const io = new SocketIO(server);
 
+// Access the environment variables
+const PORT = process.env.PORT || 4000;
+const dbConnectionString = process.env.DATABASE_CONNECTION;
+const apiBaseUrl = process.env.API_BASE_URL || `http:localhost:${PORT}`;
+
 // Middleware setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +28,7 @@ app.use('/uploads', express.static(path.resolve('./uploads')));
 
 // MongoDB connection
 mongoose
-    .connect("mongodb+srv://romangautam71399:DsqyCC1hQMH2biAP@cluster1.9zper.mongodb.net/gamingorbit?retryWrites=true&w=majority", {
+    .connect(dbConnectionString, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
@@ -33,7 +38,11 @@ mongoose
 
 // Redirect root URL to the 'adminLogin.html' page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'adminLogin.html'));
+    res.sendFile(path.join(__dirname, 'public', 'adminLogin.html'), {
+        headers: {
+            'API_BASE_URL': apiBaseUrl 
+        }
+    });
 });
 
 // Route setup
@@ -128,7 +137,6 @@ const shutdown = () => {
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
-const PORT = process.env.PORT; // Use Render's assigned port
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

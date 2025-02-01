@@ -92,10 +92,12 @@
     </div>
 
     <script>
+        const API_BASE_URL = window.location.origin;
+
         // Function to fetch user data and handle login validation
         async function validateLogin(user, password) {
             try {
-                const response = await fetch('http://localhost:4000/admin/allUsers');
+                const response = await fetch(`${API_BASE_URL}/admin/allUsers`);
                 const data = await response.json();
 
                 const userData = data.users.find(u => u.username === user && u.password === password && u.role === 'admin');
