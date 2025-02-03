@@ -71,6 +71,54 @@
         .delete-btn:hover {
             background-color: #c82333;
         }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 5px 0;
+            }
+
+            nav a {
+                margin: 10px 0;
+                font-size: 1em;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .delete-btn {
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                font-size: 1.2em;
+            }
+
+            nav a {
+                font-size: 0.9em;
+                margin: 5px 0;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .delete-btn {
+                padding: 5px 8px;
+            }
+        }
     </style>
     <script>
         async function fetchMessages() {
