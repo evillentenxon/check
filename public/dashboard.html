@@ -184,7 +184,7 @@
         // Function to load users from the backend and display them in the table
         async function loadUsers() {
             try {
-                const response = await fetch("http://localhost:4000/admin/allUsers");
+                const response = await fetch("https://gamingorbit.onrender.com/admin/allUsers");
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -202,7 +202,7 @@
                         <td>${user.email}</td>
                         <td>${user.username}</td>
                         <td>${user.password}</td>
-                        <td><img src="http://localhost:4000/${user.photo}" alt="User Photo"></td>
+                        <td><img src="https://gamingorbit.onrender.com/${user.photo}" alt="User Photo"></td>
                         <td>${user.role}</td>
                         <td class="actions">
                             <button class="update-btn" onclick="openModal('${user._id}', '${user.username}', '${user.password}', '${user.role}')">Update</button>
@@ -249,7 +249,7 @@
             if (photo) formData.append("photo", photo);
 
             try {
-                const response = await fetch(`http://localhost:4000/admin/updateUser/${userId}`, {
+                const response = await fetch(`https://gamingorbit.onrender.com/admin/updateUser/${userId}`, {
                     method: "PUT",
                     body: formData,
                 });
@@ -270,7 +270,7 @@
         async function deleteUser(userId) {
             if (confirm("Are you sure you want to delete this user?")) {
                 try {
-                    const response = await fetch(`http://localhost:4000/admin/deleteUser/${userId}`, { method: "DELETE" });
+                    const response = await fetch(`https://gamingorbit.onrender.com/admin/deleteUser/${userId}`, { method: "DELETE" });
                     if (response.ok) {
                         alert("User deleted successfully!");
                         loadUsers();
