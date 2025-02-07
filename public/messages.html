@@ -14,7 +14,8 @@
 
         table {
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 20px 0 0 0;
+            box-sizing: border-box;
             background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             table-layout: fixed;
@@ -90,6 +91,7 @@
             background-color: #c82333;
         }
 
+/* ****************************************************************  media query */
         @media (max-width: 600px) {
             table {
                 width: 100%
@@ -120,6 +122,9 @@
             td:nth-child(6),
             th:nth-child(6) {
                 display: none;
+            }
+            th:nth-child(1), td:nth-child(1){
+                width: 10px;
             }
 
         }
