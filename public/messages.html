@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,25 +11,37 @@
             margin: 20px;
             background-color: #f4f4f9;
         }
+
         table {
-            width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
             background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            table-layout: fixed;
+            width: 100%;
         }
-        th, td {
+
+        th,
+        td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            word-wrap: break-word;
         }
+
+        .sn {
+            width: 50px;
+        }
+
         th {
             background-color: #007BFF;
             color: #fff;
         }
+
         tr:hover {
             background-color: #f1f1f1;
         }
+
         h1 {
             text-align: center;
             color: #333;
@@ -36,19 +49,22 @@
 
         /* navbar */
         header {
-            width: 100%;
+            width: 100vw;
             padding: 15px;
             background-color: #007bff;
             color: white;
             text-align: center;
             font-size: 1.5em;
         }
+
         nav {
             display: flex;
             justify-content: center;
             background-color: #343a40;
             padding: 10px 0;
+            width: 100vw;
         }
+
         nav a {
             color: white;
             text-decoration: none;
@@ -56,6 +72,7 @@
             font-size: 1.1em;
             transition: color 0.3s;
         }
+
         nav a:hover {
             color: #007bff;
         }
@@ -68,36 +85,16 @@
             cursor: pointer;
             border-radius: 4px;
         }
+
         .delete-btn:hover {
             background-color: #c82333;
         }
 
-        /* Media Queries for responsiveness */
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                padding: 5px 0;
-            }
-
-            nav a {
-                margin: 10px 0;
-                font-size: 1em;
-            }
-
+        @media (max-width: 600px) {
             table {
-                font-size: 14px;
+                width: 100%
             }
 
-            th, td {
-                padding: 10px;
-            }
-
-            .delete-btn {
-                padding: 6px 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
             header {
                 font-size: 1.2em;
             }
@@ -111,13 +108,20 @@
                 font-size: 12px;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 8px;
             }
 
             .delete-btn {
                 padding: 5px 8px;
             }
+
+            td:nth-child(6),
+            th:nth-child(6) {
+                display: none;
+            }
+
         }
     </style>
     <script>
@@ -132,7 +136,7 @@
                 messages.forEach((message, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${index + 1}</td>
+                        <td class="sn">${index + 1}</td>
                         <td>${message.name}</td>
                         <td>${message.email}</td>
                         <td>${message.contact_no}</td>
@@ -173,6 +177,7 @@
         window.onload = fetchMessages;
     </script>
 </head>
+
 <body>
     <header>
         Admin Panel
@@ -184,7 +189,7 @@
     <table>
         <thead>
             <tr>
-                <th>#</th>
+                <th class="sn">#</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Contact No</th>
@@ -199,4 +204,5 @@
         </tbody>
     </table>
 </body>
+
 </html>

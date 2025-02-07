@@ -28,6 +28,11 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+
+        .sn{
+            max-width: 50px;
+            word-wrap: break-word;
+        }
         th {
             background-color: #007bff;
             color: #fff;
@@ -107,8 +112,8 @@
         }
         /* navbar */
         header {
-            width: 100%;
-            padding: 15px;
+            width: 100vw;
+            /* padding: 15px; */
             background-color: #007bff;
             color: white;
             text-align: center;
@@ -119,6 +124,7 @@
             justify-content: center;
             background-color: #343a40;
             padding: 10px 0;
+            width: 100vw;
         }
         nav a {
             color: white;
@@ -129,6 +135,13 @@
         }
         nav a:hover {
             color: #007bff;
+        }
+
+        @media (max-width: 600px){
+            nav, header{
+                width: 100vw;
+            }
+            td:nth-child(7), th:nth-child(7),td:nth-child(1), th:nth-child(1){display: none;}
         }
     </style>
 </head>
@@ -144,7 +157,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th class="sn">ID</th>
                     <th>Email</th>
                     <th>Username</th>
                     <th>Password</th>
@@ -198,7 +211,7 @@
                 users.forEach(user => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
-                        <td>${user._id}</td>
+                        <td class="sn">${user._id}</td>
                         <td>${user.email}</td>
                         <td>${user.username}</td>
                         <td>${user.password}</td>
