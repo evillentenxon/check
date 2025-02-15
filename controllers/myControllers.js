@@ -172,7 +172,7 @@ exports.requestPasswordReset = async (req, res) => {
     user.tokenExpiry = Date.now() + 120 * 1000;
     await user.save();
 
-    const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+    const resetLink = `https://gaming-orbit.vercel.app/reset-password?token=${token}`;
 
     //gmail transporter is defined at the top of the file
     await transporter.sendMail({
