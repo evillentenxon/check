@@ -10,6 +10,8 @@ router.post('/sent', upload.single('photo'), postController.postData);
 router.post('/sentOtp', postController.otpSend);
 router.post('/verifyOtp', postController.otpVerify);
 router.post('/login', postController.login);
+router.post('/forgot_password',postController.requestPasswordReset);
+router.patch('/reset-password',postController.passwordReset);
 
 //community snga related
 router.post('/communityCreate', upload.single('photo'), commController.communityCreate);

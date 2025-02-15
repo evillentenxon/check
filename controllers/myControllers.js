@@ -5,6 +5,8 @@ const otpStore = {}; // Store OTPs temporarily
 const multer = require('multer');
 const path = require('path');
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
+// const bcrypt = require('bcrypt');
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -43,25 +45,33 @@ exports.otpSend = async (req, res) => {
     return res.status(400).json({ error: 'Email is required' });
   }
 
-  // Generate OTP
-  const otp = crypto.randomInt(100000, 999999).toString();
-
-  // Store OTP in memory with email as key
-  otpStore[email] = otp;
-
-  // Send OTP email
   try {
+    // Check if email already exists in the database
+    const existingUser = await UserModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already exists' });
+    }
+
+    // Generate OTP
+    const otp = crypto.randomInt(100000, 999999).toString();
+
+    // Store OTP in memory with email as key
+    otpStore[email] = otp;
+
+    // Send OTP email
     await transporter.sendMail({
       from: 'romangautam71399@gmail.com',
       to: email,
       subject: 'Your OTP Code',
-      text: `Your OTP code is: ${otp}`
+      text: `Your OTP code is: ${otp}`,
     });
+
     res.json({ message: 'OTP sent successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Error sending OTP' });
+    console.error('Error in otpSend controller:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-}
+};
 
 // Endpoint for verifying OTP
 exports.otpVerify = async (req, res) => {
@@ -90,7 +100,7 @@ exports.login = async (req, res) => {
 
     if (password == user.password) {
       // Password matches, allow user to log in
-      res.status(200).json({ message: 'Login successful', username: user.username, photo: user.photo, userId: user._id });
+      res.status(200).json({ message: 'Login successful', username: user.username, photo: user.photo, userId: user._id, email: user.email });
     } else {
       // Password does not match
       res.status(401).json({ message: 'Invalid username or password' });
@@ -140,8 +150,83 @@ exports.countries = async (req, res) => {
     res.status(200).json(response.data);
   } catch (error) {
     console.error('Error fetching countries:', error.message);
-    
+
     // If there's an error, send a failure response
     res.status(500).json({ error: 'Failed to fetch countries.' });
+  }
+};
+
+
+// Check Email & Send Reset Link
+exports.requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+
+    const token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: '2m' });
+    user.resetToken = token;
+    user.tokenExpiry = Date.now() + 120 * 1000;
+    await user.save();
+
+    const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+
+    //gmail transporter is defined at the top of the file
+    await transporter.sendMail({
+      from: 'romangautam71399@gmail.com',
+      to: email,
+      subject: 'Reset Your Password',
+      html: `<p>Click <a href="${resetLink}">here</a> to reset your password. The link expires in 1 minute.</p>`,
+    });
+
+    res.status(200).json({ message: 'Reset link sent successfully' });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Error processing request', error });
+  }
+};
+
+//verify token and reset password 
+exports.passwordReset = async (req, res) => {
+  try {
+    const { email, token, newPassword } = req.body;
+    console.log(req.body);
+
+    // Check if all fields are provided
+    if (!email || !token || !newPassword) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Find the user by email
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found', success: false });
+    }
+
+    // Check if token matches
+    if (user.resetToken !== token) {
+      return res.status(400).json({ message: 'Invalid token', success: false });
+    }
+
+    // Check if token has expired (optional, if you store token expiry time)
+    if (user.tokenExpiry && user.tokenExpiry < Date.now()) {
+      return res.status(400).json({ message: 'Token expired', success: false });
+    }
+
+    // Update user password and clear token fields
+    user.password = newPassword;
+    user.resetToken = undefined; // Clear token after successful password reset
+    user.tokenExpiry = undefined; // Optional, clear token expiry as well
+
+    await user.save();
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
