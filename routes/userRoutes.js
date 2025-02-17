@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const upload = require('../controllers/multerConfig'); 
+const upload = require('../config/multerConfig'); 
 
 const { usersList,
     delUser,

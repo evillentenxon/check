@@ -91,7 +91,7 @@
     </style>
 </head>
 <body>
-    <form action="https://gamingorbit.onrender.com/postData/sent" method="post" enctype="multipart/form-data">
+    <form action="http://localhost:4000/postData/sent" method="post" enctype="multipart/form-data">
         <h1>Registration Form</h1>
         <label>Email: <input type="email" name="email" id="email" value="" readonly></label>
         <label>Username: <input type="text" name="username" required></label>
@@ -101,6 +101,7 @@
     </form>
 
     <script>
+        // const api_domain= "http://localhost:4000";
         // Function to get the query parameter
         function getQueryParam(param) {
             const urlParams = new URLSearchParams(window.location.search);

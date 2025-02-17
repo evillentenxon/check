@@ -7,6 +7,7 @@ const path = require('path');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 // Configure Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -20,14 +21,14 @@ const transporter = nodemailer.createTransport({
 exports.postData = async (req, res) => {
   try {
     const { email, username, password } = req.body;
-    const photoPath = req.file ? req.file.path : null; // Get the file path from the uploaded file
-
+    const photoUrl = req.file ? req.file.path : null; // Cloudinary gives URL in `path`
+    
     // Create a new user document with photo path
     const user = new UserModel({
       email,
       username,
       password,
-      photo: photoPath  // Store the path of the photo
+      photo: photoUrl  // Store the path of the photo
     });
 
     // Save the document to the database
